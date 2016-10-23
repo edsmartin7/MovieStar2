@@ -6,6 +6,8 @@ package com.example.emartin.moviestar2;
 //Git
 //http://www.goprogramming.space/connecting-an-android-studio-project-with-github/
 
+//error due to multithreading
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
