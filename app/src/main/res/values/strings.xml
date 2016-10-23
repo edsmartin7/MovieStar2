@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MovieStar2</string>
+
+    <string name="empty_input">Enter a movie here...</string>
+    <string name="main_title">Find that person from that movie about something...</string>
+    <string name="go_search">GO!</string>
+
+
+</resources>
