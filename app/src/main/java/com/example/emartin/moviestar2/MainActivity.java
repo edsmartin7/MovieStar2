@@ -5,8 +5,12 @@ package com.example.emartin.moviestar2;
 //https://github.com/spring-projects/spring-android
 //Git
 //http://www.goprogramming.space/connecting-an-android-studio-project-with-github/
-
-//error due to multithreading
+//Threading
+//don't put UI in thread?
+//https://developer.android.com/guide/components/processes-and-threads.html
+//Permissions
+//https://developer.android.com/training/permissions/requesting.html
+//https://developer.android.com/training/permissions/declaring.html
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,21 +45,26 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                String str = movieInput.getText().toString();
-                //Spring Android API
-                //GET request
-                String url = "http://www.omdbapi.com/?t=" + str;
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-                String result = restTemplate.getForObject(url, String.class, "Android");
+                new Thread(new Runnable() {
+                    public void run() {
 
-                Intent intent = new Intent(save, AppTestFragment.class);
-                intent.putExtra("results", result);
-                startActivity(intent);
-            }
-        });
-    }
-}
+                        String str = movieInput.getText().toString();
+                        //Spring Android API
+                        //GET request
+                        String url = "http://www.omdbapi.com/?t=" + str;
+                        RestTemplate restTemplate = new RestTemplate();
+                        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                        String result = restTemplate.getForObject(url, String.class, "Android");
+
+                        Intent intent = new Intent(save, AppTestFragment.class);
+                        intent.putExtra("results", result);
+                        startActivity(intent);
+                    } //end run
+                }).start(); //end runnable
+            } //end onclick
+        }); //end onclicklistener
+    } //end oncreate
+} //endclass
 
 //spring build errors
 //http://stackoverflow.com/questions/20673625/android-gradle-plugin-0-7-0-duplicate-files-during-packaging-of-apk
