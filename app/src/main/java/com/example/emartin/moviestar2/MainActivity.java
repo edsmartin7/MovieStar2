@@ -21,12 +21,21 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.JsonReader;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,15 +65,38 @@ public class MainActivity extends AppCompatActivity {
                         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                         String result = restTemplate.getForObject(url, String.class, "Android");
 
-                        Intent intent = new Intent(save, AppTestFragment.class);
-                        intent.putExtra("results", result);
-                        startActivity(intent);
-                    } //end run
-                }).start(); //end runnable
-            } //end onclick
-        }); //end onclicklistener
-    } //end oncreate
-} //endclass
+                        //Parse JSON to get actors
+                        try {
+                            JSONObject list_of_actors = new JSONObject(result);
+
+                            String all_actors = list_of_actors.getString("Actors");
+                            String pattern = "[A-Z][a-z]* [A-Z][a-z]*";
+                            Pattern name_pattern = Pattern.compile(pattern);
+                            Matcher name_match = name_pattern.matcher(all_actors);
+                            ArrayList array_of_names = new ArrayList();
+
+                            while(name_match.find()){
+                                array_of_names.add(name_match.group());
+                            }
+                            for(int j=0; j<array_of_names.size(); j++){
+                                System.out.println(array_of_names.get(j));
+                            }
+
+                        }catch (JSONException e){
+                            System.out.println("THERE WAS AN ERROR " + e);
+                        }
+
+                        //Intent intent = new Intent(save, AppTestFragment.class);
+                        //intent.putExtra("results", result);
+                        //startActivity(intent);
+                    }
+                }).start();
+            }
+        });
+    }
+}
 
 //spring build errors
 //http://stackoverflow.com/questions/20673625/android-gradle-plugin-0-7-0-duplicate-files-during-packaging-of-apk
+//json in android
+//http://stackoverflow.com/questions/9605913/how-to-parse-json-in-android
