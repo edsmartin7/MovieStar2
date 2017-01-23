@@ -11,6 +11,12 @@ package com.example.emartin.moviestar2;
 //Permissions
 //https://developer.android.com/training/permissions/requesting.html
 //https://developer.android.com/training/permissions/declaring.html
+//Google Image Search
+//http://stackoverflow.com/questions/8448788/google-custom-search-for-images-only
+//https://developers.google.com/custom-search/
+//https://developers.google.com/custom-search/docs/tutorial/customizingresults
+//   ~http://stackoverflow.com/questions/533857/whats-the-best-web-image-search-api
+//https://developers.google.com/custom-search/json-api/v1/overview
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,19 +74,11 @@ public class MainActivity extends AppCompatActivity {
                         //Parse JSON to get actors
                         try {
                             JSONObject list_of_actors = new JSONObject(result);
-
                             String all_actors = list_of_actors.getString("Actors");
-                            String pattern = "[A-Z][a-z]* [A-Z][a-z]*";
-                            Pattern name_pattern = Pattern.compile(pattern);
-                            Matcher name_match = name_pattern.matcher(all_actors);
-                            ArrayList array_of_names = new ArrayList();
+                            String[] array_of_names = all_actors.split(",");
 
-                            while(name_match.find()){
-                                array_of_names.add(name_match.group());
-                            }
-                            for(int j=0; j<array_of_names.size(); j++){
-                                System.out.println(array_of_names.get(j));
-                            }
+                            for(String actor : array_of_names)
+                               actor = actor.trim();
 
                         }catch (JSONException e){
                             System.out.println("THERE WAS AN ERROR " + e);
